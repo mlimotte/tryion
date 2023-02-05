@@ -1,0 +1,11 @@
+;; https://docs.datomic.com/cloud/client/client-api.html#client
+{:server-type   :ion
+ :region        "us-east-2"
+ :creds-profile "tryion"
+ :system        "Tryion"
+ ;; :timeout optional msec timeout (default 60000)
+ ;; :proxy-port optional local port for SSH tunnel
+
+ ;; ClientApiGatewayEndpoint output from cloudformation stack:
+ :endpoint      "https://d3n3x1mv17.execute-api.us-east-2.amazonaws.com/"
+ }

@@ -1,0 +1,15 @@
+{:app-name    "tryion"
+
+ :allow       [tryion.db.functions/valid-sku?
+               tryion.db.functions/inc-attr]
+
+ :lambdas     {:get-schema
+               {:fn tryion.lambdas/get-schema
+                :description "returns the schema for the Datomic db"}
+
+               :write-log
+               {:fn tryion.lambdas/write-log
+                :description "Write to the log"}
+               }
+
+ :http-direct {:handler-fn tryion.http/app}}

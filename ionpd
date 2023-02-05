@@ -1,0 +1,49 @@
+#!/usr/bin/env bb
+
+(require
+  '[babashka.curl :as curl]
+  '[taoensso.timbre :as timbre]
+  '[babashka.deps :as deps]
+  '[babashka.process :refer [process check]]
+  )
+
+;(deps/add-deps '{:deps {com.widdindustries/cljc.java-time {:mvn/version "0.1.21"}}})
+;(require '[java-time :as jtime])
+(import 'java.time.LocalDateTime)
+
+(defn stop
+  [msg exit-code]
+  (println msg)
+  (System/exit exit-code))
+
+(defn edn-read-all
+  [stream]
+  (with-open [rdr (java.io.PushbackReader. (io/reader stream))]
+    (doall (take-while #(not= ::eof %) (repeatedly #(edn/read {:eof ::eof} rdr))))))
+
+(defn ion-command
+  [cmd-vector]
+  (timbre/infof "Execute command %s at %s" (str/join " " cmd-vector) (LocalDateTime/now))
+  (let [{:keys [exit out] :as result}
+        @(process {:out :string :err :inherit} (str/join " " cmd-vector))]
+    (when-not (zero? exit)
+      (stop (str "Non-zero exit: " (slurp out)) 1))
+    (-> out edn-read-all last)))
+
+(defn -main
+  [& args]
+  (let [{:keys [deploy-command]} (ion-command ["clojure" "-A:ion-dev" "'{:op :push}'"])
+        {:keys [status-command]} (ion-command [deploy-command])]
+    (println status-command)
+    (loop []
+      (Thread/sleep 5000)
+      (let [{:keys [deploy-status code-deploy-status] :as result}
+            (ion-command [status-command])]
+        (println result)
+        (if (or (= deploy-status "RUNNING")
+                (= code-deploy-status "RUNNING"))
+          (recur)
+          result)))))
+
+(when (= *file* (System/getProperty "babashka.file"))
+  (apply -main *command-line-args*))

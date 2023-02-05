@@ -1,0 +1,120 @@
+{:model
+ (#:db{:ident :store/location-id,
+       :valueType :db.type/string,
+       :cardinality :db.cardinality/one,
+       :doc "A store number",
+       :unique :db.unique/identity}
+  #:db{:ident :store/name,
+       :valueType :db.type/string,
+       :cardinality :db.cardinality/one,
+       :doc "Name of the store location.",
+       :unique :db.unique/value}
+  #:db{:ident :style/id,
+       :valueType :db.type/string,
+       :cardinality :db.cardinality/one,
+       :doc
+       "The ID or number indicating a unique vendor style (i.e. independent of size and color variations)",
+       :unique :db.unique/identity}
+  #:db{:ident :asset/vendor-item-code,
+       :valueType :db.type/string,
+       :cardinality :db.cardinality/one,
+       :doc
+       "Vendor's code for a unique style with a specific color and size"}
+  {:db/ident :asset/sku,
+   :db/valueType :db.type/string,
+   :db/cardinality :db.cardinality/one,
+   :db.attr/preds [tryion.db.functions/valid-sku?],
+   :db/doc
+   "A unique stock unit id. This identifies a specific instance of a vendor-item-code available in inventory.",
+   :db/unique :db.unique/value}
+  #:db{:ident :asset/style,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/one,
+       :doc
+       "A unique vendor style (i.e. independent of size and color variations)"}
+  #:db{:ident :asset/status,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/one,
+       :doc
+       "The status of this asset as it impacts available inventory for rentals"}
+  #:db{:ident :asset-status/ready}
+  #:db{:ident :asset-status/inactive}
+  #:db{:ident :asset/store,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/one,
+       :doc "The store/location that holds this item."}
+  #:db{:ident :asset/booking-count,
+       :valueType :db.type/long,
+       :cardinality :db.cardinality/one,
+       :doc
+       "Incremented each time a booking is added. The attribute is used with db/cas to ensure that only one booking is created for an asset at a time."}
+  #:db{:ident :calendar-event/type,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/one,
+       :doc
+       "See \"Date Notes\" tab for a description of the different event types."}
+  #:db{:ident :calendar-event-type/customer-custody}
+  #:db{:ident :calendar-event-type/pre-alteration}
+  #:db{:ident :calendar-event-type/pre-cleaning}
+  #:db{:ident :calendar-event-type/occasion}
+  #:db{:ident :calendar-event-type/post-alteration}
+  #:db{:ident :calendar-event-type/post-cleaning}
+  #:db{:ident :calendar-event-type/return-to-floor}
+  #:db{:ident :calendar-event/start,
+       :valueType :db.type/instant,
+       :cardinality :db.cardinality/one,
+       :doc "The estimated/projected start date (and optionally time)"}
+  #:db{:ident :calendar-event/actual-start,
+       :valueType :db.type/instant,
+       :cardinality :db.cardinality/one,
+       :doc "The actual start date (optional)"}
+  #:db{:ident :calendar-event/end,
+       :valueType :db.type/instant,
+       :cardinality :db.cardinality/one,
+       :doc "The estimated/projected end date (and optionally time)"}
+  #:db{:ident :calendar-event/actual-end,
+       :valueType :db.type/instant,
+       :cardinality :db.cardinality/one,
+       :doc "The actual end date (optional)"}
+  #:db{:ident :calendar-event/seq,
+       :valueType :db.type/long,
+       :cardinality :db.cardinality/one,
+       :doc
+       "An ordinal indicating which of multiple appointments of the same type this is.  Most notably, pre-alteration 1, 2 or 3."}
+  #:db{:ident :booking/assets,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/many,
+       :doc "The asset associated with a Booking"}
+  #:db{:ident :booking/store,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/one,
+       :doc "The store/location supporting this booking"}
+  #:db{:ident :booking/status,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/one,
+       :doc "Status of the booking"}
+  #:db{:ident :booking-status/active}
+  #:db{:ident :booking-status/cancelled}
+  #:db{:ident :booking/calendar-events,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/many,
+       :doc "The appointments and dates associated with a Booking",
+       :isComponent true}
+  #:db{:ident :customer/external-id,
+       :valueType :db.type/string,
+       :cardinality :db.cardinality/one,
+       :doc
+       "The ID of the customer which can be looked up in the CRM system.",
+       :unique :db.unique/identity}
+  #:db{:ident :customer/bookings,
+       :valueType :db.type/ref,
+       :cardinality :db.cardinality/many,
+       :doc
+       "The customers bookings. Usually only 1 per customer, but some corner cases might require multiples.",
+       :isComponent true}
+  #:db{:ident :employee/retool-user-id,
+       :valueType :db.type/string,
+       :cardinality :db.cardinality/one,
+       :doc
+       "Used to mark transactions with the person of system that initiated it.",
+       :unique :db.unique/identity})}
