@@ -3,6 +3,8 @@
 Ions tutorial: https://docs.datomic.com/cloud/ions-tutorial/ions-tutorial.html
 
 
+* NOTE:  This was a "disposable" AWS account spun up for the purposes of testing tihs technology. That account has since be deleted, so all keys, logins, passwords and account numbers are no longer valid. *
+
 
 # AWS Account
 
