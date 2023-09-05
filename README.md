@@ -6,31 +6,20 @@ Ions tutorial: https://docs.datomic.com/cloud/ions-tutorial/ions-tutorial.html
 * NOTE:  This was a "disposable" AWS account spun up for the purposes of testing tihs technology. That account has since be deleted, so all keys, logins, passwords and account numbers are no longer valid. *
 
 
-# AWS Account
-
-Account# 208210545337
-us-east-2 (Ohio)
-gold amex
-IAM user: n/a
-S3: s3://tryion-data, plus buckets created by the stack for deploy and code
-EC2 keypair: "tryion" key-0871d860b54bb15b0 (pem file is under `tmp/`)
-Root user: mslimotte+tryion@gmail.com / tryion12!
-access keys saved in ~/.aws/credentials (as profile "tryion")
-
-
 ## Details
 
-export AWS_PROFILE=tryion
+- Stack names: Tryion
+- System name: Tryion
+- App Name: tryion
+- database-name: tryion
 
-Stack names: Tryion
-System name: Tryion
-App Name: tryion
-database-name: tryion
+`COMPUTE_GROUP="Tryion-Compute-..."`
 
-COMPUTE_GROUP="Tryion-Compute-GL419NH95X3G" 
+# To find IonApiGatewayEndpoint value
 
-# To find IonApiGatewayEndpoint value, go to AWS Console -> API Gateway -> datomic-{System Name}-ions -> "Invoke URL"
-IonApiGatewayEndpoint="2fttssk6u6.execute-api.us-east-2.amazonaws.com"
+Go to AWS Console -> API Gateway -> datomic-{System Name}-ions -> "Invoke URL"
+
+`IonApiGatewayEndpoint="2fttssk6u6.execute-api.us-east-2.amazonaws.com"`
 
 
 ## Datomic Ions Tips
